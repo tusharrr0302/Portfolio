@@ -14,6 +14,7 @@ const Model = ({ modelRef }) => {
     />
   );
 };
+useGLTF.preload("/assets/Model/Tushar3d.glb");
 
 const Hero = () => {
   const modelRef = useRef();
