@@ -19,11 +19,28 @@ useGLTF.preload("/assets/Model/Tushar3d.glb");
 const Hero = () => {
   const modelRef = useRef();
   const textRef = useRef();
+  const isHeroActive = useRef(true);
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (modelRef.current && isHeroActive.current) {
+        const x = (e.clientX / window.innerWidth - 0.5) * 2;
+        modelRef.current.rotation.y = x * 0.3;
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+
+    return () => {
+      window.removeEventListener("mousemove", handleMouseMove);
+    };
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
       let raw = Math.min(window.scrollY / 700, 1);
       const progress = 1 - Math.pow(1 - raw, 3);
+      isHeroActive.current = progress < 0.95;
 
       if (modelRef.current) {
         const targetX = -3.2;
@@ -33,6 +50,15 @@ const Hero = () => {
         modelRef.current.position.y = -2.5;
         modelRef.current.rotation.y = targetRotation * progress;
       }
+
+      // const onScrollRotation = (e) => {
+      //   if (modelRef.current) {
+      //     modelRef.current.rotation.x = e.clientX * 0.005;
+      //   }
+      // };
+      // if(modelRef.current) {
+      //   modelRef.current.rotation.x = e.clientX;
+      // }
 
       if (textRef.current) {
         if (progress > 0.95) {
@@ -86,10 +112,10 @@ const Hero = () => {
       >
         <h2 className="text-7xl font-bold text-sky-400">ABOUT</h2>
         <p className="text-xl leading-relaxed text-gray-300">
-          Agraphic designer with 3+ years of experience and 250+
-          successful projects. I specialize in bold, purposeful visuals—from
-          brand identities to high-impact thumbnails—helping creators and brands
-          stand out with precision and style.
+          Agraphic designer with 3+ years of experience and 250+ successful
+          projects. I specialize in bold, purposeful visuals—from brand
+          identities to high-impact thumbnails—helping creators and brands stand
+          out with precision and style.
         </p>
       </div>
     </div>
